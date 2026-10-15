@@ -62,3 +62,10 @@ controller tests, and actionlint for workflow syntax. Acceptance additionally
 requires real GitHub jobs on each platform; static checks alone are insufficient.
 Rollback is a focused PR restoring runner routing, retaining every check.
 Subscriptions, spending limits, required checks and production hosting are unchanged.
+
+## Provisioned macOS image provenance
+
+Initial upstream image: `ghcr.io/cirruslabs/macos-tahoe-base@sha256:4aaa751fa7538902d73c767f27a066fc87e83f183069da4e4b5022863abd4c77`.
+Tart 2.41.0 official archive SHA-256:
+`07faafc77acc668fcfb2fbe97811622567fb89c650db401a470f72e7c4ddc560`.
+Guest hardening and tool provisioning are applied before making the stopped base.
