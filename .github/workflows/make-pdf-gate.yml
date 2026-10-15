@@ -34,7 +34,7 @@ jobs:
         #   - os: windows-latest
         #     tolerant: true
 
-    runs-on: ${{ matrix.os }}
+    runs-on: ${{ fromJSON(matrix.os == 'macos-latest' && '["self-hosted", "macOS", "ARM64", "owned-macos26"]' || '["self-hosted", "Linux", "X64", "owned-linux-x64"]') }}
     steps:
       - uses: actions/checkout@v4
 
@@ -51,14 +51,23 @@ jobs:
 
       - name: Install poppler-utils (Ubuntu)
         if: matrix.os == 'ubicloud-standard-8'
-        run: sudo apt-get update && sudo apt-get install -y poppler-utils
+        run: |
+          if [ "${{ runner.environment }}" = "self-hosted" ]; then
+            dpkg-query -W poppler-utils
+          else
+            sudo apt-get update && sudo apt-get install -y poppler-utils
+          fi
 
       # Install a color-emoji font BEFORE Chromium launches so the emoji render
       # gate has a fallback font. macOS ships Apple Color Emoji already.
       - name: Install color-emoji font (Ubuntu)
         if: matrix.os == 'ubicloud-standard-8'
         run: |
-          sudo apt-get install -y fonts-noto-color-emoji
+          if [ "${{ runner.environment }}" = "self-hosted" ]; then
+            dpkg-query -W fonts-noto-color-emoji
+          else
+            sudo apt-get install -y fonts-noto-color-emoji
+          fi
           fc-cache -f || true
           fc-match -f '%{family[0]}\t%{color}\n' ':lang=und-zsye:charset=1F600' || true
 
