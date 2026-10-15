@@ -1,7 +1,10 @@
 # Persistent local CI for gstack
 
-Linux jobs, except the PDF gate, use disposable Ubuntu 24.04 x86-64 QEMU guests on owned Apple Silicon
-hardware, labelled `owned-linux-x64`. Apple Silicon jobs use disposable macOS 26
+Evaluation and image-build jobs use disposable Ubuntu 24.04 x86-64 QEMU guests
+on owned Apple Silicon hardware, labelled `owned-linux-x64`. Platform-independent
+workflow lint, documentation freshness, version and title checks use native ARM64
+Linux guests labelled `owned-linux-arm64`, avoiding emulation without removing
+any architecture-specific test coverage. Apple Silicon jobs use disposable macOS 26
 Tart guests, labelled `owned-macos26`. Windows tests remain hosted by explicit
 owner choice. The Linux PDF gate remains on hosted Ubuntu 24.04 x64 because
 QEMU emulation exceeded its existing test timeouts. Its original matrix/check
@@ -73,3 +76,11 @@ Initial upstream image: `ghcr.io/cirruslabs/macos-tahoe-base@sha256:4aaa751fa753
 Tart 2.41.0 official archive SHA-256:
 `07faafc77acc668fcfb2fbe97811622567fb89c650db401a470f72e7c4ddc560`.
 Guest hardening and tool provisioning are applied before making the stopped base.
+
+## Native Linux control checks
+
+The reviewed `native-linux/` controller uses the pristine, mount-free ARM64
+`ci-tools-base` (2 CPUs, 2 GiB) and the same rootless Docker, non-admin runner,
+private-network firewall and per-job VM disposal used by the SEO runner.
+Provision with its `base.yaml`, `provision.sh` and `network.nft`, then install
+with `python3 native-linux/install.py`. No job ever runs in the template.

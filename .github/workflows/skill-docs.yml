@@ -2,7 +2,7 @@ name: Skill Docs Freshness
 on: [push, pull_request]
 jobs:
   check-freshness:
-    runs-on: [self-hosted, Linux, X64, owned-linux-x64]
+    runs-on: [self-hosted, Linux, ARM64, owned-linux-arm64]
     steps:
       - uses: actions/checkout@v4
       - uses: oven-sh/setup-bun@v2
