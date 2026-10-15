@@ -1,9 +1,11 @@
 # Persistent local CI for gstack
 
-Linux jobs use disposable Ubuntu 24.04 x86-64 QEMU guests on owned Apple Silicon
+Linux jobs, except the PDF gate, use disposable Ubuntu 24.04 x86-64 QEMU guests on owned Apple Silicon
 hardware, labelled `owned-linux-x64`. Apple Silicon jobs use disposable macOS 26
 Tart guests, labelled `owned-macos26`. Windows tests remain hosted by explicit
-owner choice. All matrix entries, check commands, triggers and failure semantics
+owner choice. The Linux PDF gate remains on hosted Ubuntu 24.04 x64 because
+QEMU emulation exceeded its existing test timeouts. Its original matrix/check
+name is retained. All matrix entries, check commands, triggers and failure semantics
 are retained. Previously inactive workflows remain inactive.
 
 ## Linux
@@ -34,7 +36,7 @@ Set 4 CPUs and 4096 MB memory. Run with `--no-graphics --no-audio
 --no-usb-accessories --no-clipboard`, with no host shares. Before registration:
 
 1. Generate the host-only management Ed25519 key outside all checkouts.
-2. Run `macos/provision.sh` as root in the pristine guest, passing its public key.
+2. Run `CI_PRISTINE_GUEST=1 bash macos/provision.sh` as root in the pristine guest, passing its public key.
 3. Run `macos/python-toolcache.sh` as root; install poppler as the job account.
 4. Pin the guest SSH public host key as `owned-macos26-base.hostkey` beside the
    management key, prefixed with the base name (SSH HostKeyAlias).
