@@ -21,7 +21,7 @@ python3 install.py
 
 No repository jobs run in the base. Workers have no host mounts, forwarded agents,
 host Docker socket or sudo. Rootless Docker and root-owned nft rules block private
-networks and IPv6. QEMU DNS is restricted to 192.168.5.3:53. Container UID 1001 gets
+networks and IPv6. Public DNS is explicit and Lima host-resolver DNAT is disabled. Container UID 1001 gets
 a default ACL only on the disposable `_work` directory so existing non-root Docker
 jobs can write their bind mounts. Package installation occurs during provisioning;
 workflow package checks verify the preinstalled dependencies without sudo.
@@ -29,7 +29,7 @@ workflow package checks verify the preinstalled dependencies without sudo.
 ## macOS
 
 Use Tart 2.41.0 from its official release, with a pristine macOS 26 ARM64 base.
-Set 4 CPUs and 6144 MB memory. Run with `--no-graphics --no-audio
+Set 4 CPUs and 4096 MB memory. Run with `--no-graphics --no-audio
 --no-usb-accessories --no-clipboard`, with no host shares. Before registration:
 
 1. Generate the host-only management Ed25519 key outside all checkouts.
